@@ -1,0 +1,32 @@
+name: Ejercicio 4
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  test-multi-os:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+
+# usare versiones 4 evitando que me de otra vez el error de  deprecada INge 
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Ejecutar Tests
+        run: npm test
+
+      - name: Sistema Operativo
+        run: echo "Esta corriendo en el sistema operativo: ${{ runner.os }}"
+
+      - name: Solo en Linux
+        if: runner.os == 'Linux'
+        run: echo "solo en Linux"
